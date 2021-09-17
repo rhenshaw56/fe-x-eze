@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Slider from '@material-ui/core/Slider';
 import Input from './Input';
+
+import { SearchContext } from '../contexts/SearchContext';
+
+
 
 const Container = styled.div``;
 
@@ -16,15 +20,25 @@ const InputWrapper = styled.div`
 
 
 const PriceRange = () => {
+  const { dispatch } = useContext(SearchContext);
+  const handleInputChange = (e) => {
+    const target = `${e.target.name.toLowerCase()}Price`;
+    dispatch({
+      type: `UPDATE_${e.target.name}_PRICE`,
+      data: {
+        [target]: e.target.value,
+      },
+    });
+  };
   return (
     <Container>
         <Slider
         />
         <InputWrapper>
-          <StyledInput name="min" type="number"/>
+          <StyledInput onChange={handleInputChange} name="MIN" type="number"/>
         </InputWrapper>
         <InputWrapper>
-          <StyledInput name="max" type="number"/>
+          <StyledInput onChange={handleInputChange} name="MAX" type="number"/>
         </InputWrapper>
     </Container>
   );

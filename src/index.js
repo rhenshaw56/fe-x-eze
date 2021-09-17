@@ -4,8 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import 'typeface-roboto';
-
 ReactDOM.render(
   <React.StrictMode>
     <App />

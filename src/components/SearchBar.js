@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Input from './Input';
+import { SearchContext } from '../contexts/SearchContext';
 
 const Container = styled.div`
   position: relative;
@@ -28,10 +29,21 @@ const SearchButton = styled.button`
 `;
 
 const SearchBar = () => {
+  const { dispatch, ...rest } = useContext(SearchContext);
+  console.log('rest', rest);
+  const handleInputChange = (e) => {
+    dispatch({
+      type: "UPDATE_SEARCH_FIELD",
+      data: {
+        search: e.target.value,
+      },
+    });
+  };
   return (
     <Container>
       <StyledInput
         placeholder="Enter Search Term (e.g Iphone x, 128GB or A1)"
+        onChange={handleInputChange}
       />
       <SearchButton>SEARCH</SearchButton>
     </Container>

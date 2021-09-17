@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import SideBar from './components/SideBar';
 import SearchBar from './components/SearchBar';
 import Products from './components/Products';
+import { SearchContextProvider } from './contexts/SearchContext';
 
 import './App.css';
 
@@ -53,17 +54,19 @@ const ProductContainer = styled.div`
 function App() {
   return (
     <Container>
-      <PromoContainer>
-        <SearchBar />
-      </PromoContainer>
-      <Wrapper>
-        <SideBarContainer>
-          <SideBar />
-        </SideBarContainer>
-        <ProductContainer>
-          <Products />
-        </ProductContainer>
-      </Wrapper>
+      <SearchContextProvider>
+        <PromoContainer>
+          <SearchBar />
+        </PromoContainer>
+        <Wrapper>
+          <SideBarContainer>
+            <SideBar />
+          </SideBarContainer>
+          <ProductContainer>
+            <Products />
+          </ProductContainer>
+        </Wrapper>
+      </SearchContextProvider>‘
     </Container>
   );
 }

@@ -4,20 +4,17 @@ import { reducer } from './reducer';
 
 const SearchContext = createContext({});
 const searchOptions = {
-  annualSpend: null,
-  annualOrders: null,
-  nosOfEngineers: null,
-  showCharts: false,
-  estimatedCostOverTime: [],
-  cummulativeLeadtimeOvertime: [],
-  engineeringOverheadOvertime: []
+  search: null,
+  minPrice: null,
+  maxPrice: null,
+  storageOptions: [],
 };
 
 const SearchContextProvider = ({ children }) => {
-  const [SearchState, dispatch] = useReducer(reducer, searchOptions);
+  const [searchState, dispatch] = useReducer(reducer, searchOptions);
 
   return (
-    <SearchContext.Provider value={{ SearchState, dispatch }}>
+    <SearchContext.Provider value={{ searchState, dispatch }}>
       {children}
     </SearchContext.Provider>
   );

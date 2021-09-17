@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PriceRange from './PriceRange';
 import Checkbox from './Checkbox';
+
+import { SearchContext } from '../contexts/SearchContext';
+
 
 const Container = styled.div`
   display: grid;
@@ -27,8 +30,10 @@ const Container = styled.div`
 const Section = styled.div`
   display: grid;
   grid-template-rows: auto;
-  text-align: left;
   padding: 24px;
+  @media only screen and (min-width: 768px) {
+    text-align: left;
+  }
 `;
 
 const Categories = styled(Section)`
@@ -54,9 +59,27 @@ const CategoryItem = styled.span`
 `;
 
 const SideBar = () => {
+  const { dispatch, searchState } = useContext(SearchContext);
+  const { storageOptions } = searchState;
+
+
   const handleStorageChange = (e) => {
     console.log('e', e.target.value);
     console.log('e', e.target.checked);
+    let options = storageOptions;
+    if (e.target.checked) {
+      options.push(e.target.value);
+    } else {
+      options = storageOptions.filter(value => value != e.target.value);
+    }
+
+    dispatch({
+      type: `UPDATE_STORAGE_OPTIONS`,
+      data: {
+        storageOptions: options
+      },
+    });
+
   }
 
   return (
@@ -74,11 +97,15 @@ const SideBar = () => {
       <StorageOptions>
         <Title>Storage</Title>
         <>
-          <Checkbox name="32GB" onChange={handleStorageChange} />
-          <Checkbox name="64GB" onChange={handleStorageChange} />
-          <Checkbox name="128GB" onChange={handleStorageChange} />
-          <Checkbox name="256GB" onChange={handleStorageChange} />
-          <Checkbox name="512GB" onChange={handleStorageChange} />
+          {['32GB', '64GB', '128GB', '256GB', '512GB',].map((item, i) => {
+            return (
+            <Checkbox
+              key={`${item}-${i}`}
+              name={item}
+              checked={storageOptions.includes(item)}
+              onChange={handleStorageChange}
+            />
+          )})}
         </>
       </StorageOptions>
 

@@ -8,6 +8,8 @@ const Input = styled.input`
 
 const Label = styled.label`
   line-height: 32px;
+  position: relative;
+  bottom: 10px;
 `;
 
 const Wrapper = styled.div`
@@ -16,24 +18,18 @@ const Wrapper = styled.div`
 
   display: block;
   margin: 0 auto;
-  @media only screen
-    and (min-device-width: 768px)
-    and (max-device-width: 1024px) {
-      margin: 0;
-    }
-  @media screen
-    and (min-device-width: 1200px)
-    and (max-device-width: 1600px) {
-      margin: 0;
-    }
+  font-size: 0.8rem;
+  @media only screen and (min-width: 768px) {
+    margin: 0;
+  }
 `;
 
 const Checkbox = props => {
-  const {name, onChange} = props;
+  const {name, onChange,checked} = props;
 
   return (
     <Wrapper>
-      <Input type="checkbox" name={name} value={name} onChange={onChange} />
+      <Input type="checkbox" name={name} value={name} onChange={onChange} checked={checked} />
       <Label htmlFor={name}>{name}</Label>
     </Wrapper>
   );
