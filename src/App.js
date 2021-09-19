@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled'
 
 import SideBar from './components/SideBar';
 import SearchBar from './components/SearchBar';
@@ -57,9 +57,39 @@ const ProductContainer = styled.div`
   padding-bottom: 100px;
 `;
 
+const PopulateBtn = styled.button`
+  width: 60px;
+  height: 50px;
+  background: #eae8ea;
+  color: #1e242f;
+  line-height: 40px;
+  text-align: center;
+  font-size: 40px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 20px;
+  boxhadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px;
+  outline: 0;
+  position: fixed;
+  top: 90vh;
+  left: 0px;
+  user-select: none;
+&:hover, &:active {
+  opacity: 0.7;
+  cursor: pointer;
+}
+`;
+
+
+
+const LIMIT = 20;
+const INITIAL_QUERY = `page=${1}&limit=${LIMIT}&maxPrice=${1000}&minPrice=${100}`
+
 
 function App() {
-  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(1);
+  const [query, setQuery] = useState(INITIAL_QUERY);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -67,7 +97,15 @@ function App() {
     const resource = `search${query ? `?${query}` : ''}`;
     setLoading(true);
     const response = await Api.get(resource);
-    setProducts(response.data);
+    setProducts(response.data.products);
+    setCount(response.data.count)
+  }
+
+  const loadProducts = async (query) => {
+    const resource = `populate`;
+    setLoading(true);
+    await Api.post(resource);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -77,16 +115,25 @@ function App() {
 
   return (
     <Container>
-      <SearchContextProvider value={{ query, setQuery}}>
+      <SearchContextProvider
+        value={{
+          query,
+          setQuery,
+          page,
+          setPage,
+          limit: LIMIT
+        }}
+      >
         <PromoContainer>
           <SearchBar handleSearch={(query) => setQuery(query)} />
         </PromoContainer>
         <Wrapper>
           <SideBarContainer>
             <SideBar />
+            <PopulateBtn onClick={loadProducts}>+</PopulateBtn>
           </SideBarContainer>
           <ProductContainer>
-            <Products products={products} />
+            <Products products={products} count={count} />
           </ProductContainer>
         </Wrapper>
       </SearchContextProvider>‘

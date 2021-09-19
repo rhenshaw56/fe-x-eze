@@ -47,3 +47,7 @@
 .MuiSlider-markLabelActive {
   color: #fff !important;
 }
+
+*::marker {
+  content: none !important;
+}

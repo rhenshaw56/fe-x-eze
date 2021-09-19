@@ -11,11 +11,11 @@ const searchOptions = {
 };
 
 const SearchContextProvider = ({ children, value }) => {
-  const { query, setQuery} = value;
+  const { query, setQuery, page, setPage, limit} = value;
   const [searchState, dispatch] = useReducer(reducer, searchOptions);
 
   return (
-    <SearchContext.Provider value={{ searchState, dispatch, query, setQuery }}>
+    <SearchContext.Provider value={{ searchState, dispatch, query, setQuery, page, setPage, limit}}>
       {children}
     </SearchContext.Provider>
   );

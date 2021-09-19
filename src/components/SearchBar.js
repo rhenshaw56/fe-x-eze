@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled'
 import { stringify } from 'query-string';
 import { debounce } from 'debounce';
 
@@ -12,12 +12,12 @@ const Container = styled.div`
 `;
 
 const StyledInput = styled(Input)`
-height: 4rem;
-width: 70%;
-font-size: 0.8rem;
-  @media only screen and (min-width: 768px) {
-    font-size: 1rem;
-  }
+  height: 4rem;
+  width: 70%;
+  font-size: 0.8rem;
+    @media only screen and (min-width: 768px) {
+      font-size: 1rem;
+    }
 `;
 
 const SearchButton = styled.button`
@@ -39,7 +39,7 @@ const SearchButton = styled.button`
 `;
 
 const SearchBar = () => {
-  const { dispatch, searchState, setQuery } = useContext(SearchContext);
+  const { dispatch, searchState, setQuery, setPage } = useContext(SearchContext);
   const handleInputChange = (e) => {
     dispatch({
       type: "UPDATE_SEARCH_FIELD",
@@ -49,12 +49,15 @@ const SearchBar = () => {
     });
   };
   const handleClick = (e) => {
-    const { search, minPrice, maxPrice } = searchState;
+    const { search, minPrice, maxPrice, page, limit } = searchState;
+    setPage(1);
 
     const query = stringify({
       term: `${search || ''}`,
       minPrice,
-      maxPrice
+      maxPrice,
+      page: 1,
+      limit
     });
     debounce(setQuery(query), 5000);
   }

@@ -1,13 +1,10 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
-import Slider from '@material-ui/core/Slider';
+import styled from '@emotion/styled'
+import Slider from '@mui/material/Slider';
 import { stringify } from 'query-string';
 import { debounce } from 'debounce';
 
-
 import Input from './Input';
-
-
 import { SearchContext } from '../contexts/SearchContext';
 
 
@@ -25,14 +22,17 @@ const InputWrapper = styled.div`
 
 
 const PriceRange = () => {
-  const { dispatch, searchState, query, setQuery } = useContext(SearchContext);
+  const { dispatch, searchState, setQuery, limit, setPage } = useContext(SearchContext);
   const { minPrice, maxPrice, search } = searchState;
 
-  const updateQuery = (Query) => {
+  const updateQuery = () => {
+    setPage(1);
     const query = stringify({
       ...(search && { search }),
       minPrice,
-      maxPrice
+      maxPrice,
+      page: 1,
+      limit
     });
     debounce(setQuery(query), 5000);
   }

@@ -1,5 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useContext } from 'react';
+import styled from '@emotion/styled'
+import Pagination from './Pagination';
+import { stringify } from 'query-string';
+import { debounce } from 'debounce';
+
+import { SearchContext } from '../contexts/SearchContext';
 import images from './phones.json';
 
 const ImgWrapper = styled.div`
@@ -7,6 +12,11 @@ const ImgWrapper = styled.div`
 `;
 
 const Container = styled.div`
+  display: grid;
+  grid-gap: 100px;
+`;
+
+const ProductsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(1, auto);
   grid-gap: 20px;
@@ -92,26 +102,56 @@ const Price = styled.span`
   line-height: 50px;
 `;
 
-const Products = ({ products }) => {
+const Products = ({ products, count }) => {
+  const { searchState, setQuery, setPage, page, limit} = useContext(SearchContext);
+
+  const { search, minPrice, maxPrice } = searchState;
+
+
+  const updateQuery = (page) => {
+    const query = stringify({
+      ...(search && { search }),
+      minPrice,
+      maxPrice,
+      page,
+      limit
+    });
+    debounce(setQuery(query), 5000);
+  }
+
+
+  const handlePageChange = (page) => {
+    setPage(page);
+    updateQuery(page);
+  }
+
   return (
     <Container>
-      {
-        products.map(({item}) => {
-          return (
-          <ImgWrapper key={item._id}>
-            <Grade>{item.grade}</Grade>
-            <Image alt="" height={120} width={80} src={images[item.name]} />
-            <DescriptionContainer>
-              <ProductName>{item.name}</ProductName>
-              <ProductStatus>{item.status} | {item.storageSize}</ProductStatus>
-              <Desc>Unit price</Desc>
-              <Price>{item.displayPrice}</Price>
-              <Desc>1500 Available</Desc>
-            </DescriptionContainer>
-            <BuyButton>BUY</BuyButton>
-          </ImgWrapper>
-        )})
-      }
+      <ProductsContainer>
+        {
+          products.map(({item}) => {
+            return (
+            <ImgWrapper key={item._id}>
+              <Grade>{item.grade}</Grade>
+              <Image alt="" height={120} width={80} src={images[item.name]} />
+              <DescriptionContainer>
+                <ProductName>{item.name}</ProductName>
+                <ProductStatus>{item.status} | {item.storageSize}</ProductStatus>
+                <Desc>Unit price</Desc>
+                <Price>{item.displayPrice}</Price>
+                <Desc>1500 Available</Desc>
+              </DescriptionContainer>
+              <BuyButton>BUY</BuyButton>
+            </ImgWrapper>
+          )})
+        }
+      </ProductsContainer>
+      <Pagination
+        component="div"
+        count={Math.floor(count / limit)}
+        page={page}
+        onPageChange={handlePageChange}
+      />
     </Container>
   )
 }

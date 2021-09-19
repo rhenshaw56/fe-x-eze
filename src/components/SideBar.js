@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled'
 import PriceRange from './PriceRange';
 import Checkbox from './Checkbox';
 
@@ -68,7 +68,7 @@ const SideBar = () => {
     if (e.target.checked) {
       options.push(e.target.value);
     } else {
-      options = storageOptions.filter(value => value != e.target.value);
+      options = storageOptions.filter(value => value !== e.target.value);
     }
 
     dispatch({
