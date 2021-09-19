@@ -101,7 +101,7 @@ function App() {
     setCount(response.data.count)
   }
 
-  const loadProducts = async (query) => {
+  const loadProducts = async () => {
     const resource = `populate`;
     setLoading(true);
     await Api.post(resource);
