@@ -49,7 +49,7 @@ const SearchBar = () => {
     });
   };
   const handleClick = (e) => {
-    const { search, minPrice, maxPrice, page, limit } = searchState;
+    const { search, minPrice, maxPrice, limit } = searchState;
     setPage(1);
 
     const query = stringify({
