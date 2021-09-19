@@ -92,25 +92,25 @@ const Price = styled.span`
   line-height: 50px;
 `;
 
-const Products = () => {
-  const items = Array(20).fill(1).map((_i, i) => i);
+const Products = ({ products }) => {
   return (
     <Container>
       {
-        items.map((item) => (
-          <ImgWrapper key={item}>
-            <Grade>A1</Grade>
-            <Image alt="" height={120} width={80} src={images['iPhone X']} />
+        products.map(({item}) => {
+          return (
+          <ImgWrapper key={item._id}>
+            <Grade>{item.grade}</Grade>
+            <Image alt="" height={120} width={80} src={images[item.name]} />
             <DescriptionContainer>
-              <ProductName>iPhone 7</ProductName>
-              <ProductStatus>Unlocked | 256GB</ProductStatus>
+              <ProductName>{item.name}</ProductName>
+              <ProductStatus>{item.status} | {item.storageSize}</ProductStatus>
               <Desc>Unit price</Desc>
-              <Price>$450</Price>
+              <Price>{item.displayPrice}</Price>
               <Desc>1500 Available</Desc>
             </DescriptionContainer>
             <BuyButton>BUY</BuyButton>
           </ImgWrapper>
-        ))
+        )})
       }
     </Container>
   )

@@ -5,16 +5,17 @@ import { reducer } from './reducer';
 const SearchContext = createContext({});
 const searchOptions = {
   search: null,
-  minPrice: null,
-  maxPrice: null,
+  minPrice: 100,
+  maxPrice: 1000,
   storageOptions: [],
 };
 
-const SearchContextProvider = ({ children }) => {
+const SearchContextProvider = ({ children, value }) => {
+  const { query, setQuery} = value;
   const [searchState, dispatch] = useReducer(reducer, searchOptions);
 
   return (
-    <SearchContext.Provider value={{ searchState, dispatch }}>
+    <SearchContext.Provider value={{ searchState, dispatch, query, setQuery }}>
       {children}
     </SearchContext.Provider>
   );

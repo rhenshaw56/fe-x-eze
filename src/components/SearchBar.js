@@ -1,5 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { stringify } from 'query-string';
+import { debounce } from 'debounce';
+
 import Input from './Input';
 import { SearchContext } from '../contexts/SearchContext';
 
@@ -26,11 +29,17 @@ const SearchButton = styled.button`
   border: none;
   border-radius: 4px;
   margin-top: 20px;
+  boxhadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px;
+  outline: 0;
+  user-select: none;
+  &:hover, &:active {
+    opacity: 0.7;
+    cursor: pointer;
+  }
 `;
 
 const SearchBar = () => {
-  const { dispatch, ...rest } = useContext(SearchContext);
-  console.log('rest', rest);
+  const { dispatch, searchState, setQuery } = useContext(SearchContext);
   const handleInputChange = (e) => {
     dispatch({
       type: "UPDATE_SEARCH_FIELD",
@@ -39,13 +48,23 @@ const SearchBar = () => {
       },
     });
   };
+  const handleClick = (e) => {
+    const { search, minPrice, maxPrice } = searchState;
+
+    const query = stringify({
+      term: `${search || ''}`,
+      minPrice,
+      maxPrice
+    });
+    debounce(setQuery(query), 5000);
+  }
   return (
     <Container>
       <StyledInput
         placeholder="Enter Search Term (e.g Iphone x, 128GB or A1)"
         onChange={handleInputChange}
       />
-      <SearchButton>SEARCH</SearchButton>
+      <SearchButton onClick={handleClick}>SEARCH</SearchButton>
     </Container>
   )
 }

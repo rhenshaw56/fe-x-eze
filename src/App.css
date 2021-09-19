@@ -42,3 +42,8 @@
     transform: rotate(360deg);
   }
 }
+
+/* Overrides */
+.MuiSlider-markLabelActive {
+  color: #fff !important;
+}

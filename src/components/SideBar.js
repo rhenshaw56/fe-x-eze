@@ -64,8 +64,6 @@ const SideBar = () => {
 
 
   const handleStorageChange = (e) => {
-    console.log('e', e.target.value);
-    console.log('e', e.target.checked);
     let options = storageOptions;
     if (e.target.checked) {
       options.push(e.target.value);

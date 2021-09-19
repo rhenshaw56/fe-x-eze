@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+
 import SideBar from './components/SideBar';
 import SearchBar from './components/SearchBar';
 import Products from './components/Products';
 import { SearchContextProvider } from './contexts/SearchContext';
+import axios from "axios";
 
 import './App.css';
+
+const Api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL
+});
+
 
 
 const Container = styled.div`
@@ -52,18 +59,34 @@ const ProductContainer = styled.div`
 
 
 function App() {
+  const [query, setQuery] = useState('');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getProducts = async (query) => {
+    const resource = `search${query ? `?${query}` : ''}`;
+    setLoading(true);
+    const response = await Api.get(resource);
+    setProducts(response.data);
+  }
+
+  useEffect(() => {
+    getProducts(query);
+  }, [query]);
+
+
   return (
     <Container>
-      <SearchContextProvider>
+      <SearchContextProvider value={{ query, setQuery}}>
         <PromoContainer>
-          <SearchBar />
+          <SearchBar handleSearch={(query) => setQuery(query)} />
         </PromoContainer>
         <Wrapper>
           <SideBarContainer>
             <SideBar />
           </SideBarContainer>
           <ProductContainer>
-            <Products />
+            <Products products={products} />
           </ProductContainer>
         </Wrapper>
       </SearchContextProvider>‘

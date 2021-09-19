@@ -1,15 +1,9 @@
-const initialState = {
-  search: null,
-  minPrice: null,
-  maxPrice: null,
-  storageOptions: [],
-};
+
 
 export const reducer = (state, action) => {
   const { type, data } = action;
   switch (type) {
     case "UPDATE_SEARCH_FIELD":
-      console.log('e', data);
       return {
         ...state,
         ...data
