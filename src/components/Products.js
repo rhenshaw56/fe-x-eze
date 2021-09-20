@@ -28,18 +28,17 @@ const ProductsContainer = styled.div`
     grid-template-columns: repeat(2, auto);
   }
 
-  @media only screen and (min-width: 1200px) {
+  @media only screen and (min-width: 1000px) {
     grid-template-columns: repeat(3, auto);
   }
 
-  @media only screen and (min-width: 1400px) {
+  @media only screen and (min-width: 1200px) {
     grid-template-columns: repeat(4, auto);
   }
 
-  @media only screen and (min-width: 1600px) {
+  @media only screen and (min-width: 1400px) {
     grid-template-columns: repeat(5, auto);
   }
-
 `;
 
 const Image = styled.img`
@@ -58,6 +57,14 @@ const Grade = styled.span`
   padding: 3px;
   top: 10px;
   left: 90px;
+
+  @media only screen and (min-width:1000px) {
+    left: 80px;
+  }
+
+  @media only screen and (min-width: 1400px) {
+    left: 70px;
+  }
 `;
 
 const DescriptionContainer = styled.div`
@@ -85,6 +92,14 @@ const ProductName = styled.span`
   letter-spacing: 2px;
 `;
 
+const NotFound = styled.span`
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 30px;
+  letter-spacing: 2px;
+  color:  #fff;
+`;
+
 const ProductStatus = styled.span`
   font-size: 18px;
   font-weight: 300;
@@ -102,7 +117,7 @@ const Price = styled.span`
   line-height: 50px;
 `;
 
-const Products = ({ products, count }) => {
+const Products = ({ products, count, loading }) => {
   const { searchState, setQuery, setPage, page, limit} = useContext(SearchContext);
 
   const { search, minPrice, maxPrice } = searchState;
@@ -123,6 +138,14 @@ const Products = ({ products, count }) => {
   const handlePageChange = (page) => {
     setPage(page);
     updateQuery(page);
+  }
+
+  console.log('loading', loading);
+
+  if (count === 0 && !loading) {
+    return (
+      <NotFound>No Products Found</NotFound>
+    )
   }
 
   return (

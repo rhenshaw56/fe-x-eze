@@ -34,7 +34,7 @@ const Wrapper = styled.div`
     grid-gap: 0px;
   }
   @media only screen and (min-width: 960px) {
-    grid-template-columns: 350px auto;
+    grid-template-columns: 300px auto;
     grid-gap: 0px;
   }
 `;
@@ -88,7 +88,7 @@ const INITIAL_QUERY = `page=${1}&limit=${LIMIT}&maxPrice=${1000}&minPrice=${100}
 
 function App() {
   const [page, setPage] = useState(1);
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(0);
   const [query, setQuery] = useState(INITIAL_QUERY);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,16 +96,29 @@ function App() {
   const getProducts = async (query) => {
     const resource = `search${query ? `?${query}` : ''}`;
     setLoading(true);
-    const response = await Api.get(resource);
-    setProducts(response.data.products);
-    setCount(response.data.count)
+    try {
+      const response = await Api.get(resource);
+
+      setProducts(response.data.products);
+      setCount(response.data.count);
+
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
+
   }
 
   const loadProducts = async () => {
     const resource = `populate`;
     setLoading(true);
-    await Api.post(resource);
-    setLoading(false);
+    try {
+      await Api.post(resource);
+      setLoading(false);
+    } catch(e) {
+      setLoading(false);
+    }
+
   }
 
   useEffect(() => {
@@ -133,7 +146,7 @@ function App() {
             <PopulateBtn onClick={loadProducts}>+</PopulateBtn>
           </SideBarContainer>
           <ProductContainer>
-            <Products products={products} count={count} />
+            <Products products={products} count={count} loading={loading} />
           </ProductContainer>
         </Wrapper>
       </SearchContextProvider>‘
