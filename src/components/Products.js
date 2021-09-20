@@ -140,8 +140,6 @@ const Products = ({ products, count, loading }) => {
     updateQuery(page);
   }
 
-  console.log('loading', loading);
-
   if (count === 0 && !loading) {
     return (
       <NotFound>No Products Found</NotFound>

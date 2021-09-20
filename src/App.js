@@ -106,7 +106,6 @@ function App() {
     } catch (e) {
       setLoading(false);
     }
-
   }
 
   const loadProducts = async () => {
